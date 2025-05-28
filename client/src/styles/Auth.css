@@ -1,0 +1,123 @@
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+.auth-card h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.auth-card p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 24px;
+}
+
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-title {
+    color: #1890ff;
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 35px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f5f5f5;
+}
+
+.auth-tab-button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.auth-tab-button.active {
+    background-color: #1890ff;
+    color: white;
+}
+
+.welcome-message {
+    color: #52c41a;
+    margin-bottom: 30px;
+    font-size: 20px;
+}
+
+.auth-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+    text-align: center;
+    color: #8c8c8c;
+    font-size: 14px;
+}
+
+.auth-footer a {
+    color: #096dd9;
+    font-weight: 500;
+    text-decoration: none;
+    margin-left: 3px;
+}
+
+.auth-footer a:hover {
+    color: #40a9ff;
+    text-decoration: underline;
+}
+
+.auth-password {
+    text-align: right;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.auth-password a:hover {
+    color: #40a9ff;
+    text-decoration: underline;
+}
+
+.auth-button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 30px 20px;
+        box-shadow: none;
+        border: 1px solid #f0f0f0;
+    }
+
+    .auth-tab-button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
