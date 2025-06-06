@@ -4,6 +4,7 @@ import Register from './pages/Register'
 import AfterRegister from './pages/AfterRegister'
 import SetPassword from './pages/SetPassword'
 import Auth from './pages/Auth'
+import Home from './pages/Home'
 
 
 function RequireAuth({ children }) {
@@ -21,6 +22,7 @@ export default function App() {
         <Route path='/auth' element={<Auth />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/home' element={<Home />} />
         <Route
           path='/afterRegister'
           element={
@@ -32,9 +34,9 @@ export default function App() {
         <Route
           path='/setPassword'
           element={
-            //<RequireAuth>
+            <RequireAuth>
               <SetPassword />
-            //</RequireAuth>
+            </RequireAuth>
           }
         />
         <Route path='*' element={<Register />} />

@@ -5,10 +5,14 @@ import { AppDataSource } from '../config/db'
 import { sendVerifyCode } from '../utils/mailer'
 import { signToken } from '../utils/jwt'
 import { User } from '../entity/User'
+import { Friend } from '../entity/Friend'
+import { FriendRequest } from '../entity/FriendRequest'
 import { authMiddleware, AuthRequest } from '../middleware/auth'
 
 const router = Router()
 const userRepo = AppDataSource.getRepository(User)
+const friendRepo = AppDataSource.getRepository(Friend)
+const friendRequestRepo = AppDataSource.getRepository(FriendRequest)
 
 
 // 发送验证码
@@ -234,11 +238,79 @@ router.post('/setPassword', authMiddleware, async (req: AuthRequest, res) => {
 })
 
 
-// 搜索用户-TODO
-router.post('/search', authMiddleware, async (req: AuthRequest, res) => {
+// 搜索用户
+router.post('/search', async (req: AuthRequest, res) => {
+    const { identifier } = req.body
+    const userId = req.user?.id
+    const search = await userRepo.createQueryBuilder('user')
+        .where('user.email = :identifier OR user.account = :identifier', { identifier })
+        .getOne()
+    if (!search) {
+        res.status(404).json({
+            success: false,
+            message: '用户不存在'
+        })
+        return
+    }
+    const isFriend = await friendRepo.findOne({
+        where: [
+            { userA: { id: userId }, userB: { id: search.id } },
+            { userA: { id: search.id }, userB: { id: userId } }
+        ]
+    })
+    const isRequested = await friendRequestRepo.findOne({
+        where: [
+            { fromUser: { id: userId }, toUser: { id: search.id }, status: 'pending' },
+            { fromUser: { id: search.id }, toUser: { id: userId }, status: 'pending' }
+        ]
+    })
+    let status = 'stranger'
+    if (isFriend) {
+        status = 'friend'
+    } else if (isRequested) {
+        if (isRequested.fromUser.id === userId) {
+            status = 'request_sent'
+        } else {
+            status = 'request_received'
+        }
+    } else {
+        status = 'friend'
+    }
 
+    res.status(200).json({
+        success: true,
+        user: {
+            'id': search.id,
+            'email': search.email,
+            'account': search.account,
+            'nickname': search.nickname,
+            'avatar': search.avatar,
+            'status': status
+        },
+        message: '用户搜索成功'
+    })
 })
 
+// 用户个人信息
+router.get('/me', authMiddleware, async (req: AuthRequest, res) => {
+    const userId = req.user!.id
+    const user = await userRepo.findOne({
+        where: { id: userId },
+        select: ['id', 'email', 'account', 'nickname', 'avatar', 'createAt']
+    })
+    if (!user) {
+        res.status(404).json({
+            success: false,
+            message: '用户不存在'
+        })
+        return
+    }
+    res.status(200).json({
+        success: true,
+        user: user,
+        message: '用户信息获取成功'
+    })
+})
 
 
 export default router

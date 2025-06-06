@@ -17,7 +17,9 @@ export default function SetPassword(onSuccess) {
                     'Content-Type': 'application/json',
                     'authorization': 'Bearer ' + localStorage.getItem('token')
                 },
-                body: JSON.stringify({ password })
+                body: JSON.stringify({
+                    inputPassword: password
+                })
             })
             const data = await res.json()
             if (data.success) {
