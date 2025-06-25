@@ -24,7 +24,7 @@ const testData = [
 export default function ChatList() {
     return (
         <div style={{ padding: '16px' }}>
-            <Typography.Title>最近会话</Typography.Title>
+            <Typography.Title level={2}>最近会话</Typography.Title>
             <List
                 itemLayout='horizontal'
                 dataSource={testData}

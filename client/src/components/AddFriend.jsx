@@ -9,19 +9,7 @@ export default function AddFriend() {
     // 加载状态
     const [loading, setLoading] = useState(false)
     //搜索到的用户信息
-    const [user, setUser] = useState(null
-        /*
-        ||
-        {
-        id: 123,
-        email: '123@qq.com',
-        account: '123',
-        nickname: '123',
-        avatar: 'https://randomuser.me/api/portraits/lego/1.jpg',
-        status: 'stranger' // stranger, friend, request_sent, request_received
-        }
-        */
-    )
+    const [user, setUser] = useState(null)
     // 搜索状态：idle, no_result, success
     const [searchStatus, setSearchStatus] = useState('success')
     // 信息提示
@@ -32,6 +20,18 @@ export default function AddFriend() {
     const [note, setNote] = useState('')
     // 用于显示模态框
     const [isModalVisible, setIsModalVisible] = useState(false)
+
+    /* 测试用 */
+    const DEBUG = true
+    const test_data = {
+        id: 123,
+        email: '123@qq.com',
+        account: '10626631',
+        nickname: 'test_user',
+        avatar: 'https://randomuser.me/api/portraits/lego/2.jpg',
+        status: 'stranger' // stranger, friend, request_sent, request_received
+    }
+    /* 测试用 */
 
     // 获取当前用户信息
     const fetchMe = async () => {
@@ -49,6 +49,12 @@ export default function AddFriend() {
     const handleSearch = async () => {
         if (!identifier.trim()) {
             messageApi.error('请输入有效的邮箱/账号')
+            return
+        }
+        if (DEBUG) {
+            setUser(test_data)
+            setSearchStatus('success')
+            messageApi.success('用户搜索成功')
             return
         }
         setLoading(true)
@@ -82,8 +88,12 @@ export default function AddFriend() {
     // 处理补全好友请求的操作
     const handleRequest = async () => {
         if (!user) return
-        //const myNickname = (await fetchMe()).nickname
-        const myNickname = '我的昵称' // 这里可以替换为实际获取当前用户昵称的逻辑
+        var myNickname = ''
+        if (DEBUG) {
+            myNickname = '开发者'
+        } else {
+            myNickname = (await fetchMe()).nickname // 获取当前用户昵称
+        }
         setContent(`你好，我是${myNickname}，很高兴认识你！`) // 默认验证信息
         setNote('') // 清空备注
         setIsModalVisible(true) // 打开模态框
@@ -118,7 +128,7 @@ export default function AddFriend() {
     }
 
     return (
-        <div style={{ padding: 16 }}>
+        <div style={{ padding: '16px' }}>
             {messageHolder}
             <Typography.Title level={2}>添加好友</Typography.Title>
             <Input.Search

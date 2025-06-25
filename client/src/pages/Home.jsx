@@ -14,7 +14,8 @@ import {
 import '../styles/Home.css'
 import ChatList from '../components/ChatList.jsx'
 import AddFriend from '../components/AddFriend.jsx'
-
+import RequestSent from '../components/RequestSent.jsx'
+import RequestReceived from '../components/RequestReceived.jsx'
 
 const { Header, Content, Footer, Sider } = Layout
 const { Text, Title } = Typography
@@ -46,12 +47,12 @@ const items = [
                 icon: <NotificationOutlined />,
                 children: [
                     {
-                        key: 'sent',
+                        key: 'sentRequest',
                         label: '发出',
                         icon: <SendOutlined />
                     },
                     {
-                        key: 'received',
+                        key: 'receivedRequest',
                         label: '收到',
                         icon: <SendOutlined rotate={180} />
                     }
@@ -87,6 +88,10 @@ export default function Home() {
                 return <ChatList />
             case 'addFriend':
                 return <AddFriend />
+            case 'sentRequest':
+                return <RequestSent />
+            case 'receivedRequest':
+                return <RequestReceived />
             default:
                 return (
                     <div className='welcome-card'>

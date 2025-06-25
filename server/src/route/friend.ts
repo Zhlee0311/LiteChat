@@ -8,9 +8,8 @@ const router = Router()
 const requestRepo = AppDataSource.getRepository(FriendRequest)
 const friendRepo = AppDataSource.getRepository(Friend)
 
-
-// 发起好友请求
-router.post('/request', authMiddleware, async (req: AuthRequest, res) => {
+// 发送好友请求
+router.post('/request/send', authMiddleware, async (req: AuthRequest, res) => {
     const fromId = req.user!.id
     const { toId, content, noteA2B } = req.body
     if (fromId === toId) {
@@ -49,7 +48,7 @@ router.post('/request', authMiddleware, async (req: AuthRequest, res) => {
 })
 
 // 处理好友请求
-router.post('/respond', authMiddleware, async (req: AuthRequest, res) => {
+router.post('/request/handle', authMiddleware, async (req: AuthRequest, res) => {
     const { requestId, accept, noteB2A } = req.body
     const request = await requestRepo.findOne({
         where: { id: requestId, status: 'pending' },
@@ -89,13 +88,16 @@ router.get('/list', authMiddleware, async (req: AuthRequest, res) => {
         .leftJoinAndSelect('friend.userB', 'userB')
         .getMany()
     const result = friends.map(f => {
-        const other = f.userA.id === userId ? f.userB : f.userA
+        const isUserA = f.userA.id === userId
+        const other = isUserA ? f.userB : f.userA
+        const note = isUserA ? f.noteA2B : f.noteB2A
         return {
             id: other.id,
             email: other.email,
             account: other.account,
             nickname: other.nickname,
-            avatar: other.avatar
+            avatar: other.avatar,
+            note: note, // 当前用户对好友的备注
         }
     })
     res.status(200).json({
