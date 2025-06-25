@@ -1,4 +1,4 @@
-import AuthForm from '../components/Auth'
+import AuthForm from '../../components/Authorization/AuthByVerifyCode'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import '../styles/Auth.css'

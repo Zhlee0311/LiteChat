@@ -1,4 +1,4 @@
-import SetPasswordForm from '../components/SetPassword'
+import SetPasswordForm from '../../components/Misc/SetPassword'
 import { useNavigate } from 'react-router-dom'
 import '../styles/Auth.css'
 

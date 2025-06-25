@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, UserOutlined } from '@ant-design/icons'
+import {
+    EyeInvisibleOutlined, EyeTwoTone,
+    LockOutlined, UserOutlined
+} from '@ant-design/icons'
 import { Form, Input, Button, message } from 'antd'
 import '../../styles/Auth.css'
 
@@ -12,7 +15,6 @@ export default function LoginByPassword({ onSuccess }) {
     const onFinish = async (values) => {
         const { identifier, password } = values
         setLoading(true)
-
         try {
             const res = await fetch('/api/user/login/password', {
                 method: 'POST',

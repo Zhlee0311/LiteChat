@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import AfterRegister from './pages/AfterRegister'
-import SetPassword from './pages/SetPassword'
-import Auth from './pages/Auth'
-import Home from './pages/Home'
+import Login from './pages/Portal/Login'
+import Register from './pages/Portal/Register'
+import AfterRegister from './pages/Portal/AfterRegister'
+import SetPassword from './pages/Misc/SetPassword'
+import Auth from './pages/Misc/Auth'
+import Home from './pages/Home/Home'
 
 
 function RequireAuth({ children }) {
@@ -27,16 +27,16 @@ export default function App() {
           path='/afterRegister'
           element={
             //<RequireAuth>
-              < AfterRegister />
+            < AfterRegister />
             //</RequireAuth>
           }
         />
         <Route
           path='/setPassword'
           element={
-            <RequireAuth>
-              <SetPassword />
-            </RequireAuth>
+            //<RequireAuth>
+            <SetPassword />
+            //</RequireAuth>
           }
         />
         <Route path='*' element={<Register />} />

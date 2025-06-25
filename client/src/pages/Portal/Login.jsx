@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import LoginByPassword from '../components/Login/LoginByPassword'
-import LoginByVerifyCode from '../components/Login/LoginByVerifyCode'
+import LoginByPasswordForm from '../../components/Authorization/LoginByPassword'
+import LoginByVerifyCodeForm from '../../components/Authorization/LoginByVerifyCode'
 import { Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import '../styles/Auth.css'
@@ -32,9 +32,9 @@ export default function Login() {
                     </div>
 
                     {loginType === 'password' ? (
-                        <LoginByPassword onSuccess={() => navigate('/home')} />
+                        <LoginByPasswordForm onSuccess={() => navigate('/home')} />
                     ) : (
-                        <LoginByVerifyCode onSuccess={() => navigate('/home')} />
+                        <LoginByVerifyCodeForm onSuccess={() => navigate('/home')} />
                     )}
 
                     <div className='auth-footer'>

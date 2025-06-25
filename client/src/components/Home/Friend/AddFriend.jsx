@@ -2,7 +2,6 @@ import { Modal, Input, Button, Avatar, Typography, message, Spin, Card, Tooltip,
 import { SearchOutlined, UserAddOutlined, CheckOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 
-
 export default function AddFriend() {
     // 搜索用户的标识信息
     const [identifier, setIdentifier] = useState('')
@@ -31,6 +30,7 @@ export default function AddFriend() {
         avatar: 'https://randomuser.me/api/portraits/lego/2.jpg',
         status: 'stranger' // stranger, friend, request_sent, request_received
     }
+    const defaultAvatar = 'https://randomuser.me/api/portraits/lego/1.jpgh' // 默认头像
     /* 测试用 */
 
     // 获取当前用户信息
@@ -187,7 +187,7 @@ export default function AddFriend() {
                 {searchStatus === 'success' && user && (
                     <Card style={{ maxWidth: 400, marginTop: 30 }}>
                         <Card.Meta
-                            avatar={<Avatar src={user.avatar || 'https://randomuser.me/api/portraits/lego/1.jpgh'} size={64} style={{ border: '2px solid #1890ff' }} />}
+                            avatar={<Avatar src={user.avatar || defaultAvatar} size={64} style={{ border: '2px solid #1890ff' }} />}
                             title={user.nickname}
                             description={
                                 <>

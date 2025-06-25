@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Form, Input, Button, message } from 'antd'
 import { MailOutlined, KeyOutlined } from '@ant-design/icons'
 
-export default function Auth({ onSuccess }) {
+export default function AuthByVerifyCode({ onSuccess }) {
     const [form] = Form.useForm()
     const [countdown, setCountdown] = useState(0)
     const [loading, setLoading] = useState(false)

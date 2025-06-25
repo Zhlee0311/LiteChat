@@ -12,12 +12,12 @@ import {
     ContactsOutlined,
 } from '@ant-design/icons'
 import '../styles/Home.css'
-import ChatList from '../components/ChatList.jsx'
-import AddFriend from '../components/AddFriend.jsx'
-import RequestSent from '../components/RequestSent.jsx'
-import RequestReceived from '../components/RequestReceived.jsx'
+import ChatList from '../../components/Home/Chat/ChatList'
+import AddFriend from '../../components/Home/Friend/AddFriend'
+import RequestSent from '../../components/Home/Request/RequestSent'
+import RequestReceived from '../../components/Home/Request/RequestReceived'
 
-const { Header, Content, Footer, Sider } = Layout
+const { Header, Content, Sider } = Layout
 const { Text, Title } = Typography
 
 const items = [
