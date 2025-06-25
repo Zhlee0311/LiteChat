@@ -10,7 +10,7 @@ export default function AddFriend() {
     //搜索到的用户信息
     const [user, setUser] = useState(null)
     // 搜索状态：idle, no_result, success
-    const [searchStatus, setSearchStatus] = useState('success')
+    const [searchStatus, setSearchStatus] = useState('idle')
     // 信息提示
     const [messageApi, messageHolder] = message.useMessage()
     // 添加好友时的验证信息内容
@@ -155,19 +155,19 @@ export default function AddFriend() {
                 width={500}
             >
                 <Form layout='vertical'>
-                    <Form.Item label="填写验证信息">
+                    <Form.Item label='填写验证信息'>
                         <Input.TextArea
                             rows={3}
                             value={content}
-                            placeholder="输入验证信息，让对方更好地了解你"
+                            placeholder='输入验证信息，让对方更好地了解你'
                             onChange={(e) => setContent(e.target.value)}
                         />
                     </Form.Item>
-                    <Form.Item label="设置对方备注">
+                    <Form.Item label='设置对方备注'>
                         <Input.TextArea
                             rows={3}
                             value={note}
-                            placeholder="输入备注"
+                            placeholder='输入备注'
                             onChange={(e) => setNote(e.target.value)}
                         />
                     </Form.Item>
@@ -176,12 +176,12 @@ export default function AddFriend() {
             <Spin spinning={loading}>
                 {searchStatus === 'idle' && (
                     <div style={{ marginTop: 40, textAlign: 'center' }}>
-                        <Empty description={<Typography.Text type="secondary">搜索你想添加的朋友</Typography.Text>} />
+                        <Empty description={<Typography.Text type='secondary'>搜索你想添加的朋友</Typography.Text>} />
                     </div>
                 )}
                 {searchStatus === 'no_result' && (
                     <div style={{ marginTop: 40, textAlign: 'center' }}>
-                        <Empty description={<Typography.Text type="danger">未找到匹配的用户</Typography.Text>} />
+                        <Empty description={<Typography.Text type='danger'>未找到匹配的用户</Typography.Text>} />
                     </div>
                 )}
                 {searchStatus === 'success' && user && (

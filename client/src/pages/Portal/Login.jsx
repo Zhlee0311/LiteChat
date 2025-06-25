@@ -3,7 +3,7 @@ import LoginByPasswordForm from '../../components/Authorization/LoginByPassword'
 import LoginByVerifyCodeForm from '../../components/Authorization/LoginByVerifyCode'
 import { Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import '../styles/Auth.css'
+import '../../styles/Auth.css'
 
 export default function Login() {
     const [loginType, setLoginType] = useState('password') // 'password' or 'verifyCode'

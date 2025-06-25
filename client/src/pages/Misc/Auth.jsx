@@ -1,7 +1,7 @@
 import AuthForm from '../../components/Authorization/AuthByVerifyCode'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
-import '../styles/Auth.css'
+import '../../styles/Auth.css'
 
 export default function Auth() {
     const location = useLocation()

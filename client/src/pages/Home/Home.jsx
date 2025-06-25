@@ -11,8 +11,9 @@ import {
     NotificationOutlined,
     ContactsOutlined,
 } from '@ant-design/icons'
-import '../styles/Home.css'
+import '../../styles/Home.css'
 import ChatList from '../../components/Home/Chat/ChatList'
+import FriendList from '../../components/Home/Friend/FriendList'
 import AddFriend from '../../components/Home/Friend/AddFriend'
 import RequestSent from '../../components/Home/Request/RequestSent'
 import RequestReceived from '../../components/Home/Request/RequestReceived'
@@ -92,6 +93,8 @@ export default function Home() {
                 return <RequestSent />
             case 'receivedRequest':
                 return <RequestReceived />
+            case 'friendList':
+                return <FriendList />
             default:
                 return (
                     <div className='welcome-card'>

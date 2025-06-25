@@ -130,6 +130,7 @@ export default function RequestReceived() {
         }
     ]
     const DEBUG = true
+    const defauktAvatar = 'https://randomuser.me/api/portraits/lego/2.jpg'
     /*测试用*/
 
     useEffect(() => {
@@ -275,7 +276,7 @@ export default function RequestReceived() {
                                 ]}
                             >
                                 <List.Item.Meta
-                                    avatar={<Avatar src={item.fromUserAvatar || 'https://randomuser.me/api/portraits/lego/2.jpg'} />}
+                                    avatar={<Avatar src={item.fromUserAvatar || defauktAvatar} />}
                                     title={
                                         <Space direction='vertical' size={2}>
                                             <span><strong>账号：</strong>{item.fromUserAccount}</span>
@@ -319,7 +320,7 @@ export default function RequestReceived() {
                 cancelText='取消'
                 width={400}
             >
-                <p>是否拒绝好友请求？（拒绝后不可撤销！）</p>
+                <p>是否拒绝此好友请求？（此操作不可撤销！）</p>
             </Modal>
         </div >
     )

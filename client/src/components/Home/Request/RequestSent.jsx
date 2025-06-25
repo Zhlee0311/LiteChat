@@ -24,6 +24,7 @@ export default function RequestSent({ }) {
         }
     })
     const DEBUG = true
+    const defaultAvatar = 'https://randomuser.me/api/portraits/lego/1.jpg'
     /* 测试用 */
 
     // 在组件加载时获取已发出的好友请求
@@ -85,7 +86,7 @@ export default function RequestSent({ }) {
                         renderItem={(item) => (
                             <List.Item>
                                 <List.Item.Meta
-                                    avatar={<Avatar src={item.toUserAvatar || 'https://randomuser.me/api/portraits/lego/1.jpg'} />}
+                                    avatar={<Avatar src={item.toUserAvatar || defaultAvatar} />}
                                     title={
                                         <Space direction='vertical' size={2}>
                                             <span><strong>账号：</strong>{item.toUserAccount}</span>
