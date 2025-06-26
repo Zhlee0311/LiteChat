@@ -8,9 +8,15 @@ import { DeleteOutlined, MessageOutlined, SearchOutlined } from '@ant-design/ico
 import '../../../styles/FriendList.css'
 
 export default function FriendList() {
+    // 当前用户的好友
     const [friends, setFriends] = useState([])
+    // 好友列表加载状态
     const [loading, setLoading] = useState(false)
+    // 好友列表是否已加载
+    const [loaded, setLoaded] = useState(false)
+    // Ant Design 的消息提示组件
     const [messageApi, messageHolder] = message.useMessage()
+    // 搜索文本
     const [searchText, setSearchText] = useState('')
 
     /*测试用*/
@@ -28,7 +34,12 @@ export default function FriendList() {
 
     useEffect(() => {
         if (DEBUG) {
-            setFriends(test_data)
+            setLoading(true)
+            setTimeout(() => {
+                setFriends(test_data)
+                setLoading(false)
+                setLoaded(true)
+            }, 50)
             return
         }
         const fetchFriendList = async () => {
@@ -51,6 +62,7 @@ export default function FriendList() {
                 console.error('好友列表获取失败:', err)
             }
             setLoading(false)
+            setLoaded(true)
         }
         fetchFriendList()
     }, [])
@@ -102,65 +114,68 @@ export default function FriendList() {
             />
             <div className='friend-list-scroll'>
                 <Spin spinning={loading} tip='加载中...'>
-                    {friends.length > 0 ? (
-                        <List
-                            split={true}
-                            itemLayout='vertical'
-                            dataSource={filteredFriends}
-                            locale={{ emptyText: '没有条件匹配的好友' }}
-                            renderItem={(item) => (
-                                <List.Item
-                                    className='friend-list-item'
-                                    actions={[
+                    <List
+                        split={true}
+                        className='friend-list'
+                        itemLayout='vertical'
+                        dataSource={filteredFriends}
+                        locale={{
+                            emptyText: loaded ? (
+                                friends.length ?
+                                    <Empty description='未搜索到相关用户' />
+                                    : <Empty description='暂无好友' />
+                            ) : ' '
+                        }}
+                        renderItem={(item) => (
+                            <List.Item
+                                className='friend-list-item'
+                                actions={[
+                                    <Button
+                                        type='link'
+                                        icon={<MessageOutlined />}
+                                        onClick={() => console.log('TODO: 打开聊天窗口', item)}
+                                    >
+                                        聊天
+                                    </Button>,
+                                    <Popconfirm
+                                        title='确认是否删除此好友（此操作不可撤销）'
+                                        onConfirm={() => handleDelete(item.id)}
+                                        okText='确定'
+                                        cancelText='取消'
+                                    >
                                         <Button
+                                            danger
+                                            icon={<DeleteOutlined />}
                                             type='link'
-                                            icon={<MessageOutlined />}
-                                            onClick={() => console.log('TODO: 打开聊天窗口', item)}
                                         >
-                                            聊天
-                                        </Button>,
-                                        <Popconfirm
-                                            title='确定删除该好友吗（此操作不可撤销）'
-                                            onConfirm={() => handleDelete(item.id)}
-                                            okText='确定'
-                                            cancelText='取消'
-                                        >
-                                            <Button
-                                                danger
-                                                icon={<DeleteOutlined />}
-                                                type='link'
-                                            >
-                                                删除
-                                            </Button>
-                                        </Popconfirm>,
-                                    ]}
-                                >
-                                    <List.Item.Meta
-                                        className='metadata'
-                                        avatar={
-                                            <Avatar
-                                                className='ant-avatar'
-                                                src={item.avatar || defaultAvatar}
-                                            />
-                                        }
-                                        title={
-                                            <Space direction='vertical' size={2}>
-                                                {item.note ? `${item.note} (${item.nickname})` : item.nickname}
-                                            </Space>
-                                        }
-                                        description={
-                                            <Typography.Text type='secondary'>
-                                                <strong>邮箱：</strong> {item.email} <br />
-                                                <strong>账号：{item.account}</strong>
-                                            </Typography.Text>
-                                        }
-                                    />
-                                </List.Item>
-                            )}
-                        />
-                    ) : (
-                        <Empty description={<Typography.Text type='secondary'>找呀找呀找朋友，找到一个好朋友</Typography.Text>} />
-                    )}
+                                            删除
+                                        </Button>
+                                    </Popconfirm>,
+                                ]}
+                            >
+                                <List.Item.Meta
+                                    className='metadata'
+                                    avatar={
+                                        <Avatar
+                                            className='ant-avatar'
+                                            src={item.avatar || defaultAvatar}
+                                        />
+                                    }
+                                    title={
+                                        <Space direction='vertical' size={2}>
+                                            {item.note ? `${item.note} (${item.nickname})` : item.nickname}
+                                        </Space>
+                                    }
+                                    description={
+                                        <Typography.Text type='secondary'>
+                                            <strong>邮箱：</strong> {item.email} <br />
+                                            <strong>账号：{item.account}</strong>
+                                        </Typography.Text>
+                                    }
+                                />
+                            </List.Item>
+                        )}
+                    />
                 </Spin>
             </div>
         </div>

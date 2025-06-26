@@ -1,6 +1,7 @@
 import { Modal, Input, Button, Avatar, Typography, message, Spin, Card, Tooltip, Empty, Form } from 'antd'
 import { SearchOutlined, UserAddOutlined, CheckOutlined } from '@ant-design/icons'
 import { useState } from 'react'
+import '../../../styles/AddFriend.css'
 
 export default function AddFriend() {
     // 搜索用户的标识信息
@@ -52,9 +53,13 @@ export default function AddFriend() {
             return
         }
         if (DEBUG) {
-            setUser(test_data)
-            setSearchStatus('success')
-            messageApi.success('用户搜索成功')
+            setLoading(true)
+            setTimeout(() => {
+                setUser(test_data)
+                setSearchStatus('success')
+                setLoading(false)
+                messageApi.success('用户搜索成功')
+            }, 500)
             return
         }
         setLoading(true)
@@ -102,7 +107,7 @@ export default function AddFriend() {
     // 处理提交好友请求的操作
     const handleSubmit = async () => {
         try {
-            const res = await fetch('/api/friend/request', {
+            const res = await fetch('/api/friend/request/send', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -141,9 +146,9 @@ export default function AddFriend() {
                     setUser(null)
                 }}
                 onSearch={handleSearch}
-                loading={loading}
+                loading={false}
                 size='large'
-                style={{ marginTop: 24, maxWidth: 300 }}
+                className='search-bar'
             />
             <Modal
                 title='发送好友请求'
@@ -173,21 +178,24 @@ export default function AddFriend() {
                     </Form.Item>
                 </Form>
             </Modal>
-            <Spin spinning={loading}>
-                {searchStatus === 'idle' && (
-                    <div style={{ marginTop: 40, textAlign: 'center' }}>
+            <Spin spinning={loading} tip='搜索中...' className='search-loading'>
+                {searchStatus === 'idle' && !loading && (
+                    <div className='text-prompt' >
                         <Empty description={<Typography.Text type='secondary'>搜索你想添加的朋友</Typography.Text>} />
                     </div>
                 )}
-                {searchStatus === 'no_result' && (
-                    <div style={{ marginTop: 40, textAlign: 'center' }}>
-                        <Empty description={<Typography.Text type='danger'>未找到匹配的用户</Typography.Text>} />
+                {searchStatus === 'no_result' && !loading && (
+                    <div className='text-prompt'>
+                        <Empty description={<Typography.Text type='danger'>未搜索到相关用户</Typography.Text>} />
                     </div>
                 )}
-                {searchStatus === 'success' && user && (
-                    <Card style={{ maxWidth: 400, marginTop: 30 }}>
+                {searchStatus === 'success' && user && !loading && (
+                    <Card className='user-card'>
                         <Card.Meta
-                            avatar={<Avatar src={user.avatar || defaultAvatar} size={64} style={{ border: '2px solid #1890ff' }} />}
+                            avatar={<Avatar
+                                src={user.avatar || defaultAvatar}
+                                className='ant-avatar'
+                            />}
                             title={user.nickname}
                             description={
                                 <>
@@ -196,7 +204,7 @@ export default function AddFriend() {
                                 </>
                             }
                         />
-                        <div style={{ textAlign: 'right', marginTop: 16 }}>
+                        <div className='action-buttons'>
                             {(() => {
                                 switch (user.status) {
                                     case 'friend':
@@ -205,7 +213,7 @@ export default function AddFriend() {
                                         return <Button disabled icon={< UserAddOutlined />}>已发送好友请求</Button>
                                     case 'request_received':
                                         return (
-                                            <Tooltip title='对方向你发送了好友请求，前往好友请求列表中查看'>
+                                            <Tooltip title='对方向你发送了好友请求，前往收到的好友请求列表中查看'>
                                                 <Button disabled type='dashed'>等待处理</Button>
                                             </Tooltip>
                                         )

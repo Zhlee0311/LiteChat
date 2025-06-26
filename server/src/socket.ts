@@ -17,6 +17,7 @@ interface ClientData {
 
 const onlineUsers = new Map<number, string>() // userId -> socketId
 
+// 鉴权中间件，在socket.data上添加用户ID
 io.use((socket, next) => {
     const token = socket.handshake.auth.token
     if (!token) {

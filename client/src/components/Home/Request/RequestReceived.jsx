@@ -1,20 +1,31 @@
 import { useEffect, useState } from 'react'
 import {
-    List, Avatar, Typography, Tag, Modal,
-    Empty, Spin, Button, message, Input, Space,
-    Tooltip
+    List, Avatar, Typography,
+    Tag, Modal, Empty, Spin,
+    Button, message, Input,
+    Space, Tooltip
 } from 'antd'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import '../../../styles/Request.css'
 
 export default function RequestReceived() {
+    //  当前接收的好友请求列表
     const [requests, setRequests] = useState([])
+    // 加载状态
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(0)// 用于强制刷新
-    const [noteInputVisible, setNoteInputVisible] = useState(false) // 是否显示备注输入框
-    const [rejectConfirmVisible, setRejectConfirmVisible] = useState(false) // 是否显示拒绝确认框
-    const [currentRequestId, setCurrentRequestId] = useState(null) // 当前正在处理的请求ID
-    const [noteB2A, setNoteB2A] = useState('') // 接收方对发送方的备注
+    // 是否已加载
+    const [loaded, setLoaded] = useState(false)
+    // 强制刷新状态
+    const [refresh, setRefresh] = useState(0)
+    // 是否显示备注输入框
+    const [noteInputVisible, setNoteInputVisible] = useState(false)
+    // 是否显示拒绝确认框
+    const [rejectConfirmVisible, setRejectConfirmVisible] = useState(false)
+    // 当前正在处理的请求ID
+    const [currentRequestId, setCurrentRequestId] = useState(null)
+    // 接收方对发送方的备注
+    const [noteB2A, setNoteB2A] = useState('')
+    // Ant Design 的消息提示组件
     const [messageApi, messageHolder] = message.useMessage()
 
     /*测试用*/
@@ -131,12 +142,17 @@ export default function RequestReceived() {
         }
     ]
     const DEBUG = true
-    const defauktAvatar = 'https://randomuser.me/api/portraits/lego/2.jpg'
+    const defaultAvatar = 'https://randomuser.me/api/portraits/lego/2.jpg'
     /*测试用*/
 
     useEffect(() => {
         if (DEBUG) {
-            setRequests(test_data)
+            setLoading(true)
+            setTimeout(() => {
+                setRequests(test_data)
+                setLoading(false)
+                setLoaded(true)
+            }, 500)
             return
         }
         const fetchRequests = async () => {
@@ -163,6 +179,7 @@ export default function RequestReceived() {
                 messageApi.error('获取好友请求失败，请稍后重试')
             }
             setLoading(false)
+            setLoaded(true)
         }
         fetchRequests()
     }, [refresh])
@@ -239,67 +256,66 @@ export default function RequestReceived() {
             {messageHolder}
             <Spin spinning={loading} tip='加载中...'>
                 <Typography.Title level={2}>收到的好友请求</Typography.Title>
-                {requests.length > 0 ? (
-                    <List
-                        itemLayout='horizontal'
-                        dataSource={requests}
-                        pagination={{
-                            pageSize: 6,
-                            showSizeChanger: false,
-                            showTotal: total => `共 ${total} 条记录`
-                        }}
-                        renderItem={(item) => (
-                            <List.Item
-                                className='request-list-item'
-                                
-                                actions={item.status === 'pending' ? [
-                                    <Space>
-                                        <Tooltip title="接受">
-                                            <Button
-                                                type="text"
-                                                icon={<CheckOutlined style={{ color: 'green' }} />}
-                                                onClick={() => handleAcceptClick(item.id)}
-                                            />
-                                        </Tooltip>
-                                        <Tooltip title="拒绝">
-                                            <Button
-                                                type="text"
-                                                icon={<CloseOutlined style={{ color: 'red' }} />}
-                                                onClick={() => handleRejectClick(item.id)}
-                                            />
-                                        </Tooltip>
+                <List
+                    itemLayout='horizontal'
+                    className='request-list'
+                    dataSource={requests}
+                    locale={{
+                        emptyText: loaded ? <Empty description='暂无收到的好友请求' /> : ' '
+                    }}
+                    pagination={{
+                        pageSize: 6,
+                        showSizeChanger: false,
+                        showTotal: total => `共 ${total} 条记录`
+                    }}
+                    renderItem={(item) => (
+                        <List.Item
+                            className='request-list-item'
+                            actions={item.status === 'pending' ? [
+                                <Space>
+                                    <Tooltip title="接受">
+                                        <Button
+                                            type="text"
+                                            icon={<CheckOutlined style={{ color: 'green' }} />}
+                                            onClick={() => handleAcceptClick(item.id)}
+                                        />
+                                    </Tooltip>
+                                    <Tooltip title="拒绝">
+                                        <Button
+                                            type="text"
+                                            icon={<CloseOutlined style={{ color: 'red' }} />}
+                                            onClick={() => handleRejectClick(item.id)}
+                                        />
+                                    </Tooltip>
+                                </Space>
+                            ] : [
+                                <Tag color={
+                                    item.status === 'accepted' ? 'success' :
+                                        item.status === 'rejected' ? 'error' : 'default'
+                                }>
+                                    {item.status === 'accepted' ? '已接受' : '已拒绝'}
+                                </Tag>
+                            ]}
+                        >
+                            <List.Item.Meta
+                                avatar={
+                                    <Avatar
+                                        src={item.fromUserAvatar || defaultAvatar}
+                                        className='ant-avatar'
+                                    />}
+                                title={
+                                    <Space direction='vertical' size={2}>
+                                        <div><strong>账号：</strong>{item.fromUserAccount}</div>
+                                        <div><strong>昵称：</strong>{item.fromUserNickname}</div>
                                     </Space>
-                                ] : [
-                                    <Tag color={
-                                        item.status === 'accepted' ? 'success' :
-                                            item.status === 'rejected' ? 'error' : 'default'
-                                    }>
-                                        {item.status === 'accepted' ? '已接受' : '已拒绝'}
-                                    </Tag>
-                                ]}
-                            >
-                                <List.Item.Meta
-                                    avatar={
-                                        <Avatar
-                                            src={item.fromUserAvatar || defauktAvatar}
-                                            className='ant-avatar'
-                                        />}
-                                    title={
-                                        <Space direction='vertical' size={2}>
-                                            <div><strong>账号：</strong>{item.fromUserAccount}</div>
-                                            <div><strong>昵称：</strong>{item.fromUserNickname}</div>
-                                        </Space>
-                                    }
-                                    description={
-                                        <div style={{ marginTop: 8 }}><strong>验证信息：</strong> {item.content}</div>
-                                    }
-                                />
-                            </List.Item>
-                        )}
-                    />
-                ) : (
-                    <Empty description='暂无收到的请求' />
-                )}
+                                }
+                                description={
+                                    <div style={{ marginTop: 8 }}><strong>验证信息：</strong> {item.content}</div>
+                                }
+                            />
+                        </List.Item>
+                    )}
+                />
             </Spin>
 
             <Modal
@@ -327,7 +343,7 @@ export default function RequestReceived() {
                 cancelText='取消'
                 width={400}
             >
-                <p>是否拒绝此好友请求？（此操作不可撤销！）</p>
+                <p>确认是否拒绝此好友请求（此操作不可撤销）</p>
             </Modal>
         </div >
     )

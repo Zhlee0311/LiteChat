@@ -1,3 +1,7 @@
+.friend-list {
+    min-height: 200px;
+}
+
 .friend-list-scroll {
     max-height: calc(100vh - 260px);
     overflow-y: auto;

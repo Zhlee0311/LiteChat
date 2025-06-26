@@ -1,3 +1,7 @@
+.request-list {
+    min-height: 200px;
+}
+
 .request-list-item {
     position: relative;
     background: #fff;

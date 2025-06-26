@@ -1,0 +1,41 @@
+.search-bar {
+    margin-top: 8px;
+    max-width: 300px;
+}
+
+.search-loading{
+    min-height: 200px;
+    margin-top: 20px;
+}
+
+.text-prompt {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.user-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 8px;
+    max-width: 400px;
+    margin-top: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f0f0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-card .action-buttons {
+    text-align: right;
+    margin-top: 16px;
+}
+
+.user-card .ant-avatar {
+    width: 64px;
+    height: 64px;
+    border: 2px solid #1890ff;
+}
+
+.user-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
