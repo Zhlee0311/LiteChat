@@ -2,9 +2,10 @@ import { useEffect, useState, useMemo } from 'react'
 import {
     List, Avatar, Button, Spin,
     message, Popconfirm, Typography,
-    Empty, Input
+    Empty, Input, Space
 } from 'antd'
 import { DeleteOutlined, MessageOutlined, SearchOutlined } from '@ant-design/icons'
+import '../../../styles/FriendList.css'
 
 export default function FriendList() {
     const [friends, setFriends] = useState([])
@@ -15,7 +16,7 @@ export default function FriendList() {
     /*测试用*/
     const DEBUG = true
     const defaultAvatar = 'https://randomuser.me/api/portraits/lego/2.jpg'
-    const test_data = Array.from({ length: 20 }, (_, i) => ({
+    const test_data = Array.from({ length: 50 }, (_, i) => ({
         id: i + 1,
         email: `user${i + 1}@example.com`,
         account: `user${i + 1}`,
@@ -23,7 +24,6 @@ export default function FriendList() {
         avatar: defaultAvatar,
         note: i % 3 === 0 ? `备注${i + 1}` : ''
     }))
-
     /*测试用*/
 
     useEffect(() => {
@@ -80,35 +80,37 @@ export default function FriendList() {
         }
     }
 
+    const filteredFriends = useMemo(() => {
+        if (!searchText) return friends
+        return friends.filter(f => {
+            const target = (f.nickname + f.email + f.account + f.note).toLowerCase()
+            return target.includes(searchText)
+        })
+    }, [friends, searchText])
+
     return (
-        <div style={{ padding: '16px' }}>
+        <div style={{ padding: '16px 0px 16px 16px' }}>
             {messageHolder}
             {<Typography.Title level={2}>好友列表</Typography.Title>}
-            <div style={{ marginBottom: '16px' }}>
-                <Input.Search
-                    size='large'
-                    value={searchText}
-                    enterButton={<SearchOutlined />}
-                    placeholder='搜索好友（账号 / 昵称 / 邮箱 / 备注）'
-                    onChange={(e) => setSearchText(e.target.value)}
-                    style={{ marginTop: 8, maxWidth: 350 }}
-                />
-            </div>
-            <Spin spinning={loading} tip='加载中...'>
-                {friends.length > 0 ? (
-                    <div style={{ flex: 1, overflowY: 'auto', paddingRight: 8 }}>
+            <Input
+                size='large'
+                value={searchText}
+                prefix={<SearchOutlined />}
+                placeholder='搜索好友（账号 / 昵称 / 邮箱 / 备注）'
+                onChange={(e) => setSearchText(e.target.value.trim().toLowerCase())}
+                style={{ marginTop: 8, marginBottom: 20, maxWidth: 340 }}
+            />
+            <div className='friend-list-scroll'>
+                <Spin spinning={loading} tip='加载中...'>
+                    {friends.length > 0 ? (
                         <List
+                            split={true}
                             itemLayout='vertical'
-                            dataSource={friends}
+                            dataSource={filteredFriends}
+                            locale={{ emptyText: '没有条件匹配的好友' }}
                             renderItem={(item) => (
                                 <List.Item
-                                    style={{
-                                        background: '#fff',
-                                        borderRadius: 12,
-                                        padding: 16,
-                                        marginBottom: 16,
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                                    }}
+                                    className='friend-list-item'
                                     actions={[
                                         <Button
                                             type='link'
@@ -123,22 +125,28 @@ export default function FriendList() {
                                             okText='确定'
                                             cancelText='取消'
                                         >
-                                            <Button danger icon={<DeleteOutlined />} />
+                                            <Button
+                                                danger
+                                                icon={<DeleteOutlined />}
+                                                type='link'
+                                            >
+                                                删除
+                                            </Button>
                                         </Popconfirm>,
                                     ]}
                                 >
                                     <List.Item.Meta
+                                        className='metadata'
                                         avatar={
                                             <Avatar
-                                                size={64}
+                                                className='ant-avatar'
                                                 src={item.avatar || defaultAvatar}
-                                                style={{ border: '2px solid #eee' }}
                                             />
                                         }
                                         title={
-                                            <Typography.Title level={5} style={{ margin: 0 }}>
+                                            <Space direction='vertical' size={2}>
                                                 {item.note ? `${item.note} (${item.nickname})` : item.nickname}
-                                            </Typography.Title>
+                                            </Space>
                                         }
                                         description={
                                             <Typography.Text type='secondary'>
@@ -150,11 +158,11 @@ export default function FriendList() {
                                 </List.Item>
                             )}
                         />
-                    </div>
-                ) : (
-                    <Empty description={<Typography.Text type='secondary'>找呀找呀找朋友，找到一个好朋友</Typography.Text>} />
-                )}
-            </Spin>
+                    ) : (
+                        <Empty description={<Typography.Text type='secondary'>找呀找呀找朋友，找到一个好朋友</Typography.Text>} />
+                    )}
+                </Spin>
+            </div>
         </div>
     )
 }

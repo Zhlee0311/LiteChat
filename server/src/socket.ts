@@ -23,7 +23,7 @@ io.use((socket, next) => {
         return next(new Error('未提供token'))
     }
     // token里的id是用户id
-    const decoded = verifyToken(token) as { id: number }
+    const decoded = verifyToken(token) as ClientData
     if (!decoded) {
         next(new Error('无效的token'))
     } else {

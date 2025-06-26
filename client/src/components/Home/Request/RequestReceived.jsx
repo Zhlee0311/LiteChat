@@ -5,6 +5,7 @@ import {
     Tooltip
 } from 'antd'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import '../../../styles/Request.css'
 
 export default function RequestReceived() {
     const [requests, setRequests] = useState([])
@@ -249,6 +250,8 @@ export default function RequestReceived() {
                         }}
                         renderItem={(item) => (
                             <List.Item
+                                className='request-list-item'
+                                
                                 actions={item.status === 'pending' ? [
                                     <Space>
                                         <Tooltip title="接受">
@@ -276,15 +279,19 @@ export default function RequestReceived() {
                                 ]}
                             >
                                 <List.Item.Meta
-                                    avatar={<Avatar src={item.fromUserAvatar || defauktAvatar} />}
+                                    avatar={
+                                        <Avatar
+                                            src={item.fromUserAvatar || defauktAvatar}
+                                            className='ant-avatar'
+                                        />}
                                     title={
                                         <Space direction='vertical' size={2}>
-                                            <span><strong>账号：</strong>{item.fromUserAccount}</span>
-                                            <span><strong>昵称：</strong>{item.fromUserNickname}</span>
+                                            <div><strong>账号：</strong>{item.fromUserAccount}</div>
+                                            <div><strong>昵称：</strong>{item.fromUserNickname}</div>
                                         </Space>
                                     }
                                     description={
-                                        <div><strong>验证信息：</strong> {item.content}</div>
+                                        <div style={{ marginTop: 8 }}><strong>验证信息：</strong> {item.content}</div>
                                     }
                                 />
                             </List.Item>
@@ -314,7 +321,7 @@ export default function RequestReceived() {
             <Modal
                 title='拒绝好友请求'
                 open={rejectConfirmVisible}
-                onOk={confirmAccept}
+                onOk={confirmReject}
                 onCancel={() => setRejectConfirmVisible(false)}
                 okText='确认'
                 cancelText='取消'

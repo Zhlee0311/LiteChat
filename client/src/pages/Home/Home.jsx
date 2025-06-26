@@ -108,7 +108,12 @@ export default function Home() {
         <Layout className='home-layout'>
             <Sider width={280} className='home-sider'>
                 <div className='user-profile'>
-                    <Avatar size={120} src='https://randomuser.me/api/portraits/men/32.jpg' />
+                    <Avatar
+                        size={120}
+                        src='https://randomuser.me/api/portraits/men/32.jpg'
+                        className='ant-avatar'
+                        onClick={() => setSelectedKey('profile')}
+                    />
                     <Title level={4} className='user-name'>LiteChat_User</Title>
                     <Text type='success'>● 在线</Text>
                 </div>

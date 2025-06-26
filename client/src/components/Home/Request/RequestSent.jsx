@@ -1,6 +1,6 @@
 import { Space, List, Tag, Avatar, Typography, Empty, Spin } from 'antd'
 import { useEffect, useState } from 'react'
-
+import '../../../styles/request.css'
 
 export default function RequestSent({ }) {
     const [loading, setLoading] = useState(false)
@@ -84,13 +84,19 @@ export default function RequestSent({ }) {
                             showTotal: total => `共 ${total} 条记录`
                         }}
                         renderItem={(item) => (
-                            <List.Item>
+                            <List.Item
+                                className='request-list-item'
+                            >
                                 <List.Item.Meta
-                                    avatar={<Avatar src={item.toUserAvatar || defaultAvatar} />}
+                                    avatar={
+                                        <Avatar
+                                            src={item.toUserAvatar || defaultAvatar}
+                                            className='ant-avatar'
+                                        />}
                                     title={
                                         <Space direction='vertical' size={2}>
-                                            <span><strong>账号：</strong>{item.toUserAccount}</span>
-                                            <span><strong>昵称：</strong>{item.toUserNickname}</span>
+                                            <div><strong>账号：</strong>{item.toUserAccount}</div>
+                                            <div><strong>昵称：</strong>{item.toUserNickname}</div>
                                         </Space>
                                     }
                                     description={
